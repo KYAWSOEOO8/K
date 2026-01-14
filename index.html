@@ -3,192 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMO Tools - Professional Mockup Tool</title>
+    <title>DMO Tools - Exact Resolution</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
-        /* အရောင်သတ်မှတ်ချက်များ */
         :root {
             --bg-color: #f8f9fa;
             --card-bg: #ffffff;
             --text-color: #222;
-            --sub-text: #666;
-            --accent: #007bff;
-            --device-border: #333;
         }
-
         .dark-theme {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
             --text-color: #fff;
-            --sub-text: #bbb;
-            --device-border: #444;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; padding: 15px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; padding: 20px; }
 
-        /* Header */
-        .header { 
-            width: 100%; max-width: 400px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 5px 20px; 
-        }
-        .logo { color: var(--accent); font-size: 26px; font-weight: bold; text-decoration: none; }
-        .header-icons { display: flex; gap: 20px; align-items: center; }
-        .fb-link { color: #1877f2; font-size: 24px; text-decoration: none; }
-        .mode-toggle { font-size: 22px; cursor: pointer; }
+        .header { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; }
+        .logo { color: #007bff; font-size: 24px; font-weight: bold; text-decoration: none; }
 
-        /* Card Container */
-        .card { 
-            background: var(--card-bg); width: 100%; max-width: 380px; 
-            border-radius: 30px; padding: 25px; text-align: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-        }
-
-        /* Device Select */
-        .select-label { display: block; text-align: left; margin-bottom: 8px; font-size: 14px; font-weight: bold; }
-        .device-select {
-            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
-            margin-bottom: 20px; background: var(--card-bg); color: var(--text-color); outline: none;
-        }
-
-        /* Phone Frame (Aspect Ratio 1840:3600) */
+        /* Background Area (1840:3600 ratio ကို base ထား၍ 300px:587px ဖြင့်ပြသသည်) */
         #capture-area {
-            width: 280px; height: 548px; /* အချိုးကျချိန်ထားသည် */
-            background: #000; margin: 0 auto 20px; 
-            border: 10px solid var(--device-border);
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
+            width: 300px; 
+            height: 587px; 
+            background: #e0e0e0; /* Background အရောင် */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
-        .iphone { border-radius: 45px; }
-        .android { border-radius: 15px; }
+
+        /* Phone Frame (1550:3600 ratio ကို base ထား၍ 252px:587px ဖြင့်ပြသသည်) */
+        .phone-mockup {
+            width: 252px; 
+            height: 587px; 
+            background: #000;
+            border: 6px solid #333;
+            border-radius: 35px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
 
         #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .placeholder-ui { color: #444; text-align: center; }
 
-        /* Buttons */
-        .btn {
-            width: 100%; padding: 16px; border-radius: 50px; border: none;
-            font-size: 16px; font-weight: bold; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-bottom: 12px;
-        }
+        .card { background: var(--card-bg); width: 100%; max-width: 380px; border-radius: 25px; padding: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .btn { width: 100%; padding: 15px; border-radius: 50px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn-select { background-color: #e7f0ff; color: #007bff; }
         .btn-download { background-color: #007bff; color: white; }
-        .btn:disabled { background-color: #ccc; cursor: not-allowed; }
-
-        .footer-text { font-size: 13px; color: var(--sub-text); margin-top: 5px; }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <a href="#" class="logo">DMO Tools</a>
-        <div class="header-icons">
-            <a href="https://www.facebook.com" target="_blank" class="fb-link">
-                <i class="fab fa-facebook"></i>
-            </a>
-            <i class="fas fa-sun mode-toggle" id="mode-btn"></i>
-        </div>
+        <div class="logo">DMO Tools</div>
+        <i class="fas fa-sun" id="mode-btn" style="cursor:pointer;"></i>
     </header>
 
     <div class="card">
-        <label class="select-label">ဖုန်းအမျိုးအစား ရွေးချယ်ပါ</label>
-        <select class="device-select" id="device-switcher">
-            <option value="iphone">iPhone Style (Rounded)</option>
-            <option value="android">Android Style (Square)</option>
-        </select>
-
-        <div id="capture-area" class="iphone">
-            <img id="preview-img" src="">
-            <div class="placeholder-ui" id="placeholder">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 40px; margin-bottom: 10px;"></i>
-                <p style="font-size: 12px;">ပုံရွေးချယ်ပါ</p>
+        <div id="capture-area">
+            <div class="phone-mockup" id="phone-frame">
+                <img id="preview-img" src="">
+                <i class="fas fa-image" id="placeholder" style="color:#444; font-size:30px;"></i>
             </div>
         </div>
 
-        <p class="footer-text" style="margin-bottom: 20px;">အရွယ်အစား 1840 x 3600 အကြည် ထွက်ရှိမည်။</p>
+        <p style="font-size: 12px; margin-bottom: 15px;">Background: 1840x3600 | Phone: 1550x3600</p>
 
-        <input type="file" id="file-input" accept="image/*" style="display:none;">
-        
-        <button class="btn btn-select" onclick="document.getElementById('file-input').click()">
-            <i class="fas fa-plus-circle"></i> Screenshot တင်မည်
-        </button>
-
-        <button class="btn btn-download" id="download-btn" onclick="generateHighRes()">
-            Get Started <i class="fas fa-arrow-right"></i>
-        </button>
+        <input type="file" id="file-in" accept="image/*" style="display:none;">
+        <button class="btn btn-select" onclick="document.getElementById('file-in').click()">📸 Screenshot ရွေးမည်</button>
+        <button class="btn btn-download" onclick="exportImage()">💾 ပုံသိမ်းမည်</button>
     </div>
 
     <script>
-        // ၁။ Dark Mode Logic
-        const modeBtn = document.getElementById('mode-btn');
-        modeBtn.onclick = () => {
+        // Dark Mode
+        document.getElementById('mode-btn').onclick = function() {
             document.body.classList.toggle('dark-theme');
-            modeBtn.classList.toggle('fa-moon');
-            modeBtn.classList.toggle('fa-sun');
+            this.classList.toggle('fa-moon');
         };
 
-        // ၂။ Device Switcher
-        const deviceSelect = document.getElementById('device-switcher');
-        const captureArea = document.getElementById('capture-area');
-        deviceSelect.onchange = () => {
-            captureArea.className = deviceSelect.value;
-        };
-
-        // ၃။ Image Preview
-        const fileInput = document.getElementById('file-input');
-        const previewImg = document.getElementById('preview-img');
-        const placeholder = document.getElementById('placeholder');
-
-        fileInput.onchange = (e) => {
+        // Image Preview
+        document.getElementById('file-in').onchange = function(e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (event) => {
-                    previewImg.src = event.target.result;
-                    previewImg.style.display = 'block';
-                    placeholder.style.display = 'none';
+                    const img = document.getElementById('preview-img');
+                    img.src = event.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('placeholder').style.display = 'none';
                 };
                 reader.readAsDataURL(file);
             }
         };
 
-        // ၄။ High Resolution (1840x3600) Export
-        async function generateHighRes() {
-            if (!previewImg.src) {
-                alert("ကျေးဇူးပြု၍ Screenshot ပုံအရင်တင်ပေးပါ");
-                return;
-            }
+        // ပုံထုတ်ယူခြင်း (High Resolution)
+        async function exportImage() {
+            if (!document.getElementById('preview-img').src) return alert("ပုံအရင်တင်ပါ");
 
-            const btn = document.getElementById('download-btn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-            btn.disabled = true;
+            const area = document.getElementById('capture-area');
+            const btn = document.querySelector('.btn-download');
+            btn.innerText = "သိမ်းနေသည်...";
 
-            try {
-                // 1840 / 280 (current width) = 6.57 scale factor
-                const canvas = await html2canvas(captureArea, {
-                    scale: 6.572, 
-                    useCORS: true,
-                    backgroundColor: null,
-                    width: 280,
-                    height: 548
-                });
+            // 1840 / 300 = 6.133 scale factor
+            const canvas = await html2canvas(area, {
+                width: 300,
+                height: 587,
+                scale: 6.133,
+                useCORS: true,
+                backgroundColor: null
+            });
 
-                const link = document.createElement('a');
-                link.download = `DMO_Mockup_${Date.now()}.png`;
-                link.href = canvas.toDataURL("image/png", 1.0);
-                link.click();
-            } catch (error) {
-                console.error(error);
-                alert("ပုံထုတ်ရာတွင် အမှားအယွင်းရှိနေပါသည်။");
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
+            const link = document.createElement('a');
+            link.download = 'DMO_HighRes_Mockup.png';
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+            btn.innerText = "ပုံသိမ်းမည်";
         }
     </script>
 </body>
