@@ -2,173 +2,164 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMO Tools - Ultra Color Edition</title>
+    <title>DMO Studio Pro - Final Version</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
     <style>
-        :root { --bg-color: #f4f7f6; --card-bg: #ffffff; --text-color: #1a1a1a; --accent: #007bff; }
-        .dark-theme { --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #eeeeee; }
+        :root { --accent: #007bff; --bg: #f4f7f6; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        /* Welcome Screen */
+        #welcome-screen { text-align: center; background: white; padding: 40px; border-radius: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        .choice-card { background: #f8f9fa; border: 2px solid #eee; border-radius: 20px; padding: 25px; margin: 15px 0; cursor: pointer; transition: 0.3s; }
+        .choice-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .choice-card i { font-size: 40px; color: var(--accent); margin-bottom: 10px; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.2s; }
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; padding: 20px; }
-
-        .card { background: var(--card-bg); width: 100%; max-width: 400px; border-radius: 30px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-
-        .label { display: block; text-align: left; font-size: 11px; font-weight: bold; margin: 10px 0 5px; color: #777; }
-        .select-box { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; background: var(--card-bg); color: var(--text-color); outline: none; margin-bottom: 10px; }
-
-        /* Color Palette Grid */
-        .color-palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; padding: 10px; border: 1px solid #eee; border-radius: 15px; background: #fafafa; }
-        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #ddd; justify-self: center; }
-        .color-dot.active { border-color: var(--accent); transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); }
-
-        /* Mockup Area */
-        #capture-area {
-            width: 280px; height: 548px; background: transparent;
-            display: flex; justify-content: center; align-items: center;
-            position: relative; margin: 0 auto 15px;
-        }
-
-        .phone-frame {
-            width: 235px; height: 506px; background: #000;
-            border: 8px solid #222; position: relative;
-            overflow: hidden; display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Notches & Buttons */
-        .camera { position: absolute; background: #000; z-index: 10; left: 50%; transform: translateX(-50%); }
-        .island { top: 10px; width: 70px; height: 18px; border-radius: 20px; }
-        .hole { top: 12px; width: 10px; height: 10px; border-radius: 50%; }
-
-        .hw-btn { position: absolute; background: inherit; border-radius: 2px; z-index: -1; border: 1px solid rgba(0,0,0,0.1); }
-        .side-lr .pwr { right: -11px; top: 120px; width: 4px; height: 45px; }
-        .side-lr .vol-u { left: -11px; top: 100px; width: 4px; height: 35px; }
-        .side-lr .vol-d { left: -11px; top: 140px; width: 4px; height: 35px; }
-
-        .side-r .pwr { right: -11px; top: 160px; width: 4px; height: 40px; }
-        .side-r .vol-all { right: -11px; top: 90px; width: 4px; height: 60px; }
-
-        #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        #hint { color: #333; font-size: 30px; position: absolute; }
-
-        .btn { width: 100%; padding: 16px; border-radius: 50px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-select { background: #eef6ff; color: #007bff; border: 1px dashed #007bff; }
-        .btn-download { background: #007bff; color: white; }
+        /* Main Editor */
+        #main-tool { display: none; background: white; width: 100%; max-width: 420px; border-radius: 30px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; }
+        
+        #capture-area { width: 300px; height: 560px; margin: 0 auto 15px; position: relative; display: flex; justify-content: center; align-items: center; background: transparent; }
+        .phone-frame { width: 250px; height: 520px; background: #000; border: 8px solid #333; border-radius: 44px; position: relative; overflow: hidden; }
+        .notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 75px; height: 20px; background: #000; border-radius: 20px; z-index: 100; }
+        
+        #content-img, #content-video { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .btn { width: 100%; padding: 15px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
+        .btn-upload { background: #eef6ff; color: var(--accent); border: 2px dashed var(--accent); }
+        .btn-save { background: var(--accent); color: white; display: none; }
+        .btn-back { background: none; color: #888; font-size: 13px; margin-top: 10px; }
+        
+        #status-msg { font-size: 12px; color: #d9534f; margin-top: 10px; font-weight: bold; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <label class="label">ဖုန်းမော်ဒယ် ရွေးချယ်ပါ</label>
-        <select class="select-box" id="device-select">
-            <option value="iphone">iPhone 15 / 16 Series</option>
-            <option value="samsung">Samsung Galaxy S Series</option>
-            <option value="android">Vivo / Oppo / Xiaomi / Realme</option>
-        </select>
+    <div id="welcome-screen">
+        <h2 style="margin-bottom: 20px;">DMO Mockup Studio</h2>
+        <div class="choice-card" onclick="startTool('image')">
+            <i class="fas fa-image"></i>
+            <h3>Screenshot (ပုံ)</h3>
+        </div>
+        <div class="choice-card" onclick="startTool('video')">
+            <i class="fas fa-video"></i>
+            <h3>Screen Record (ဗီဒီယို)</h3>
+        </div>
+    </div>
 
-        <label class="label">Original အရောင်များ ရွေးချယ်ရန်</label>
-        <div class="color-palette" id="color-palette"></div>
-
+    <div id="main-tool">
+        <h3 id="tool-title" style="margin-bottom: 15px;">Editor</h3>
+        
         <div id="capture-area">
             <div class="phone-frame" id="phone-ui">
-                <div id="cam" class="camera island"></div>
-                <div class="hw-btn pwr"></div>
-                <div class="hw-btn vol-u" id="v-up"></div>
-                <div class="hw-btn vol-d" id="v-down"></div>
-                <div class="hw-btn vol-all" id="v-all"></div>
-                <img id="preview-img" src="">
-                <i class="fas fa-plus" id="hint"></i>
+                <div class="notch"></div>
+                <img id="content-img">
+                <video id="content-video" muted playsinline loop></video>
             </div>
         </div>
 
-        <input type="file" id="file-in" accept="image/*" style="display:none;">
-        <button class="btn btn-select" onclick="document.getElementById('file-in').click()">
-            <i class="fas fa-image"></i> Screenshot ရွေးမည်
+        <div id="status-msg">Processing... Please wait.</div>
+
+        <input type="file" id="file-in" style="display:none;">
+        <button class="btn btn-upload" id="upload-btn" onclick="document.getElementById('file-in').click()">
+            <i class="fas fa-cloud-upload-alt"></i> ဖိုင်ရွေးချယ်ပါ
         </button>
-        <button class="btn btn-download" id="save-btn" onclick="exportHighRes()">
-            Get Started <i class="fas fa-arrow-circle-down"></i>
+
+        <button class="btn btn-save" id="save-btn">
+            Get Started <i class="fas fa-download"></i>
+        </button>
+
+        <button class="btn btn-back" onclick="location.reload()">
+            <i class="fas fa-arrow-left"></i> ရှေ့စာမျက်နှာသို့ပြန်သွားမည်
         </button>
     </div>
 
     <script>
-        const config = {
-            iphone: {
-                style: "radius-iphone side-lr", cam: "camera island", radius: "44px",
-                colors: ["#FFFFFF", "#F5F5F0", "#2D2D2E", "#4B4942", "#594F63", "#1B2431", "#E5D1D0", "#FFD700", "#C0C0C0", "#FFB6C1"]
-            },
-            samsung: {
-                style: "radius-android side-r", cam: "camera hole", radius: "28px",
-                colors: ["#F9F9F9", "#252525", "#EAD8C1", "#4A4553", "#313131", "#7B92A2", "#D4E2D4", "#E5C1CD", "#2E3B4E", "#1A1A1A"]
-            },
-            android: {
-                style: "radius-android side-r", cam: "camera hole", radius: "22px",
-                colors: ["#FFFFFF", "#000000", "#004D40", "#7C4DFF", "#FF5252", "#FFEB3B", "#2196F3", "#4CAF50", "#FF9800", "#9C27B0"]
-            }
-        };
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const mainTool = document.getElementById('main-tool');
+        const fileIn = document.getElementById('file-in');
+        const img = document.getElementById('content-img');
+        const video = document.getElementById('content-video');
+        const saveBtn = document.getElementById('save-btn');
+        const statusMsg = document.getElementById('status-msg');
+        
+        let mode = '';
 
-        const deviceSelect = document.getElementById('device-select');
-        const colorPalette = document.getElementById('color-palette');
-        const phoneUI = document.getElementById('phone-ui');
-        const cam = document.getElementById('cam');
-
-        function updateUI(id) {
-            const data = config[id];
-            colorPalette.innerHTML = "";
-            
-            data.colors.forEach((color, i) => {
-                const dot = document.createElement('div');
-                dot.className = `color-dot ${i === 0 ? 'active' : ''}`;
-                dot.style.backgroundColor = color;
-                dot.onclick = () => {
-                    document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
-                    dot.classList.add('active');
-                    phoneUI.style.borderColor = color;
-                };
-                colorPalette.appendChild(dot);
-            });
-
-            phoneUI.className = 'phone-frame ' + data.style;
-            phoneUI.style.borderRadius = data.radius;
-            cam.className = data.cam;
-            phoneUI.style.borderColor = data.colors[0];
-
-            const isLR = data.style.includes('side-lr');
-            document.getElementById('v-up').style.display = isLR ? "block" : "none";
-            document.getElementById('v-down').style.display = isLR ? "block" : "none";
-            document.getElementById('v-all').style.display = isLR ? "none" : "block";
+        function startTool(selectedMode) {
+            mode = selectedMode;
+            welcomeScreen.style.display = 'none';
+            mainTool.style.display = 'block';
+            document.getElementById('tool-title').innerText = mode === 'image' ? "Image Editor" : "Video Editor";
+            fileIn.accept = mode === 'image' ? "image/*" : "video/*";
         }
 
-        deviceSelect.onchange = () => updateUI(deviceSelect.value);
-        updateUI('iphone');
-
-        document.getElementById('file-in').onchange = (e) => {
+        fileIn.onchange = (e) => {
             const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (ev) => {
-                    document.getElementById('preview-img').src = ev.target.result;
-                    document.getElementById('preview-img').style.display = 'block';
-                    document.getElementById('hint').style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            saveBtn.style.display = 'flex';
+
+            if (mode === 'image') {
+                img.src = url;
+                img.style.display = 'block';
+                video.style.display = 'none';
+            } else {
+                video.src = url;
+                video.style.display = 'block';
+                img.style.display = 'none';
+                video.onloadedmetadata = () => video.play();
             }
         };
 
-        async function exportHighRes() {
-            if (!document.getElementById('preview-img').src) return alert("ပုံအရင်ရွေးပါ");
-            const btn = document.getElementById('save-btn');
-            btn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-            const canvas = await html2canvas(document.getElementById('capture-area'), {
-                scale: 6.57, useCORS: true, backgroundColor: null
-            });
-            const link = document.createElement('a');
-            link.download = `DMO_Mockup_${Date.now()}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-            btn.innerHTML = 'Get Started <i class="fas fa-arrow-circle-down"></i>';
-        }
+        saveBtn.onclick = async () => {
+            saveBtn.disabled = true;
+            statusMsg.style.display = 'block';
+
+            if (mode === 'image') {
+                // Image Save Logic
+                try {
+                    const canvas = await html2canvas(document.getElementById('capture-area'), {
+                        useCORS: true,
+                        scale: 3,
+                        backgroundColor: null
+                    });
+                    const link = document.createElement('a');
+                    link.download = `DMO_Mockup_${Date.now()}.png`;
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                } catch (err) {
+                    alert("ပုံသိမ်းလို့မရပါ: " + err);
+                }
+            } else {
+                // Video Save Logic
+                try {
+                    const stream = video.captureStream();
+                    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm; codecs=vp9' });
+                    const chunks = [];
+                    recorder.ondataavailable = (e) => chunks.push(e.data);
+                    recorder.onstop = () => {
+                        const blob = new Blob(chunks, { type: 'video/webm' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `DMO_Mockup_Video_${Date.now()}.webm`;
+                        a.click();
+                    };
+                    video.currentTime = 0;
+                    video.play();
+                    recorder.start();
+                    setTimeout(() => {
+                        recorder.stop();
+                        saveBtn.disabled = false;
+                        statusMsg.style.display = 'none';
+                    }, video.duration * 1000);
+                    return; // exit to prevent immediate reset
+                } catch (err) {
+                    alert("ဗီဒီယိုသိမ်းလို့မရပါ: " + err);
+                }
+            }
+            saveBtn.disabled = false;
+            statusMsg.style.display = 'none';
+        };
     </script>
 </body>
 </html>
