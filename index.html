@@ -3,152 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Mockup Generator</title>
+    <title>DMO Tools - Full UI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #222;
+            --accent: #007bff;
         }
 
-        .controls {
-            margin-bottom: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .dark-theme {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #fff;
         }
 
-        /* ဖုန်း Frame ဒီဇိုင်း */
-        .mockup-container {
-            position: relative;
-            width: 320px;
-            height: 650px;
-            background: #1a1a1a;
-            border-radius: 45px;
-            border: 12px solid #333;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; padding: 15px; }
+
+        /* Header Layout */
+        .header { 
+            width: 100%; 
+            max-width: 400px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 5px;
+            margin-bottom: 10px;
+        }
+        .logo { color: var(--accent); font-size: 24px; font-weight: bold; text-decoration: none; }
+        
+        .header-icons { display: flex; align-items: center; gap: 15px; }
+        
+        /* Facebook Icon Style */
+        .fb-link {
+            color: #1877f2; /* Facebook မူရင်းအပြာရောင် */
+            font-size: 22px;
+            text-decoration: none;
         }
 
-        /* အပေါ်က Speaker ပေါက်ပုံစံ */
-        .mockup-container::before {
-            content: "";
-            position: absolute;
-            top: 15px;
-            width: 60px;
-            height: 5px;
-            background: #555;
-            border-radius: 10px;
-            z-index: 10;
+        .mode-toggle { font-size: 20px; cursor: pointer; }
+
+        /* Card & Device Area */
+        .card { 
+            background: var(--card-bg); width: 100%; max-width: 380px; 
+            border-radius: 30px; padding: 25px; text-align: center; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
         }
 
-        /* ပုံပြသမည့် Screen နေရာ */
-        .screen {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        .device-select {
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd;
+            margin-bottom: 20px; background: var(--card-bg); color: var(--text-color);
         }
 
-        #preview-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* ပုံကို Screen ထဲအပြည့်ဖြည့်ရန် */
-            display: none;
+        #capture-area {
+            width: 230px; height: 470px; background: #000;
+            margin: 0 auto 20px; border: 8px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
 
-        .placeholder-text {
-            color: #555;
-            text-align: center;
-            padding: 20px;
-        }
+        .iphone { border-radius: 40px; }
+        .android { border-radius: 15px; }
 
-        button {
-            padding: 10px 25px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
+        #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 15px; border-radius: 50px; border: none;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin-bottom: 10px;
         }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        input[type="file"] {
-            padding: 8px;
-        }
+        .btn-select { background-color: #e7f0ff; color: #007bff; }
+        .btn-download { background-color: #007bff; color: white; }
     </style>
 </head>
 <body>
 
-    <h2>Screenshot ကို ဖုန်း Frame ထဲထည့်ပါ</h2>
-
-    <div class="controls">
-        <input type="file" id="imageInput" accept="image/*">
-        <button onclick="saveMockup()">ပုံအဖြစ် သိမ်းမည်</button>
-    </div>
-
-    <div id="capture-area" class="mockup-container">
-        <div class="screen">
-            <img id="preview-img" src="" alt="Screenshot Preview">
-            <div id="placeholder" class="placeholder-text">Screenshot တစ်ခု ရွေးချယ်ပါ</div>
+    <header class="header">
+        <a href="#" class="logo">DMO Tools</a>
+        <div class="header-icons">
+            <a href="https://www.facebook.com/your-page-link" target="_blank" class="fb-link">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <i class="fas fa-sun mode-toggle" id="dark-btn"></i>
         </div>
+    </header>
+
+    <div class="card">
+        <select class="device-select" id="deviceChange">
+            <option value="iphone">iPhone Style</option>
+            <option value="android">Android Style</option>
+        </select>
+
+        <div id="capture-area" class="iphone">
+            <img id="preview-img" src="">
+            <i class="fas fa-image" id="icon-placeholder" style="font-size:40px; color:#444;"></i>
+        </div>
+
+        <p style="font-size: 14px; margin-bottom: 20px; opacity: 0.8;">သင့် Screenshot ကို ဖုန်း Frame ထဲထည့်ပြီး သိမ်းဆည်းပါ။</p>
+
+        <input type="file" id="fileIn" accept="image/*" style="display:none;">
+        <button class="btn btn-select" onclick="document.getElementById('fileIn').click()">
+            <i class="fas fa-plus-circle"></i> ပုံရွေးမည်
+        </button>
+        <button class="btn btn-download" onclick="takeDownload()">
+            Get Started <i class="fas fa-arrow-right"></i>
+        </button>
     </div>
 
     <script>
-        const imageInput = document.getElementById('imageInput');
-        const previewImg = document.getElementById('preview-img');
-        const placeholder = document.getElementById('placeholder');
+        // ၁။ Facebook နှင့် Dark Mode ပေါင်းစည်းမှု
+        document.getElementById('dark-btn').onclick = function() {
+            document.body.classList.toggle('dark-theme');
+            this.classList.toggle('fa-moon');
+        };
 
-        // File ရွေးလိုက်တဲ့အခါ Preview ပြရန်
-        imageInput.addEventListener('change', function() {
+        // ၂။ ဖုန်းအမျိုးအစား ပြောင်းလဲမှု
+        document.getElementById('deviceChange').onchange = function() {
+            const area = document.getElementById('capture-area');
+            area.className = this.value;
+        };
+
+        // ၃။ ပုံရွေးချယ်မှု
+        document.getElementById('fileIn').onchange = function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    previewImg.style.display = 'block';
-                    placeholder.style.display = 'none';
-                }
+                reader.onload = (e) => {
+                    const img = document.getElementById('preview-img');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('icon-placeholder').style.display = 'none';
+                };
                 reader.readAsDataURL(file);
             }
-        });
+        };
 
-        // Html2Canvas သုံးပြီး ပုံအဖြစ် Download ဆွဲရန်
-        function saveMockup() {
-            if (!imageInput.files[0]) {
-                alert("ကျေးဇူးပြု၍ ပုံအရင်ရွေးပါ");
-                return;
-            }
-
-            const captureArea = document.getElementById('capture-area');
+        // ၄။ ပုံထုတ်ယူမှု (Download)
+        function takeDownload() {
+            const imgCheck = document.getElementById('preview-img').src;
+            if (!imgCheck) return alert("ပုံအရင်တင်ပေးပါ");
             
-            html2canvas(captureArea, {
-                backgroundColor: null, // နောက်ခံကို အကြည်ထားရန်
-                scale: 2 // ပုံထွက်ကြည်လင်စေရန်
-            }).then(canvas => {
+            html2canvas(document.getElementById('capture-area')).then(canvas => {
                 const link = document.createElement('a');
-                link.download = 'phone-mockup.png';
-                link.href = canvas.toDataURL("image/png");
+                link.download = 'dmo-mockup.png';
+                link.href = canvas.toDataURL();
                 link.click();
             });
         }
     </script>
-
 </body>
 </html>
