@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMO Tools - Icon Edition</title>
+    <title>DMO Tools - Ultra Color Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
@@ -11,120 +11,115 @@
         :root { --bg-color: #f4f7f6; --card-bg: #ffffff; --text-color: #1a1a1a; --accent: #007bff; }
         .dark-theme { --bg-color: #121212; --card-bg: #1e1e1e; --text-color: #eeeeee; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.2s; }
         body { background-color: var(--bg-color); color: var(--text-color); display: flex; flex-direction: column; align-items: center; padding: 20px; }
 
-        .header { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: var(--accent); text-decoration: none; }
+        .card { background: var(--card-bg); width: 100%; max-width: 400px; border-radius: 30px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
 
-        .card { background: var(--card-bg); width: 100%; max-width: 380px; border-radius: 30px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .label { display: block; text-align: left; font-size: 11px; font-weight: bold; margin: 10px 0 5px; color: #777; }
+        .select-box { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; background: var(--card-bg); color: var(--text-color); outline: none; margin-bottom: 10px; }
 
-        .label { display: block; text-align: left; font-size: 12px; font-weight: bold; margin-bottom: 8px; color: #777; }
-        .select-box { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; background: var(--card-bg); color: var(--text-color); margin-bottom: 15px; outline: none; }
+        /* Color Palette Grid */
+        .color-palette { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; padding: 10px; border: 1px solid #eee; border-radius: 15px; background: #fafafa; }
+        .color-dot { width: 30px; height: 30px; border-radius: 50%; cursor: pointer; border: 2px solid #ddd; justify-self: center; }
+        .color-dot.active { border-color: var(--accent); transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); }
 
-        .color-palette { display: flex; gap: 12px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
-        .color-dot { width: 32px; height: 32px; border-radius: 50%; cursor: pointer; border: 2px solid #ddd; }
-        .color-dot.active { border-color: var(--accent); transform: scale(1.1); box-shadow: 0 0 10px rgba(0,123,255,0.3); }
-
+        /* Mockup Area */
         #capture-area {
             width: 280px; height: 548px; background: transparent;
             display: flex; justify-content: center; align-items: center;
-            position: relative; margin: 0 auto 20px;
+            position: relative; margin: 0 auto 15px;
         }
 
         .phone-frame {
             width: 235px; height: 506px; background: #000;
-            border: 7px solid #222; position: relative;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: 8px solid #222; position: relative;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
         }
 
+        /* Notches & Buttons */
+        .camera { position: absolute; background: #000; z-index: 10; left: 50%; transform: translateX(-50%); }
+        .island { top: 10px; width: 70px; height: 18px; border-radius: 20px; }
+        .hole { top: 12px; width: 10px; height: 10px; border-radius: 50%; }
+
         .hw-btn { position: absolute; background: inherit; border-radius: 2px; z-index: -1; border: 1px solid rgba(0,0,0,0.1); }
-        .iphone .pwr { right: -10px; top: 110px; width: 3px; height: 50px; }
-        .iphone .vol-u { left: -10px; top: 95px; width: 3px; height: 35px; }
-        .iphone .vol-d { left: -10px; top: 140px; width: 3px; height: 35px; }
-        .android .pwr { right: -10px; top: 150px; width: 3px; height: 40px; }
-        .android .vol-a { right: -10px; top: 85px; width: 3px; height: 55px; }
+        .side-lr .pwr { right: -11px; top: 120px; width: 4px; height: 45px; }
+        .side-lr .vol-u { left: -11px; top: 100px; width: 4px; height: 35px; }
+        .side-lr .vol-d { left: -11px; top: 140px; width: 4px; height: 35px; }
 
-        .radius-iphone { border-radius: 42px; }
-        .radius-samsung { border-radius: 26px; }
-        .radius-vivo { border-radius: 20px; }
+        .side-r .pwr { right: -11px; top: 160px; width: 4px; height: 40px; }
+        .side-r .vol-all { right: -11px; top: 90px; width: 4px; height: 60px; }
 
-        #preview-img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; display: none; }
-        #hint { color: #555; font-size: 30px; position: absolute; }
+        #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        #hint { color: #333; font-size: 30px; position: absolute; }
 
-        /* Buttons & Icons */
-        .btn { width: 100%; padding: 16px; border-radius: 50px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 12px; }
-        .btn-select { background-color: #eef6ff; color: #007bff; border: 1px dashed #007bff; }
-        .btn-download { background-color: #007bff; color: white; box-shadow: 0 4px 15px rgba(0,123,255,0.4); }
-        .btn-download:hover { background-color: #0056b3; }
-        
-        .btn i { font-size: 18px; } /* Icon Size */
+        .btn { width: 100%; padding: 16px; border-radius: 50px; border: none; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-select { background: #eef6ff; color: #007bff; border: 1px dashed #007bff; }
+        .btn-download { background: #007bff; color: white; }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <a href="#" class="logo">DMO Tools</a>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <a href="https://facebook.com" target="_blank" style="color:#1877f2; font-size: 24px;"><i class="fab fa-facebook"></i></a>
-            <i class="fas fa-moon" id="mode-btn" style="cursor:pointer; font-size: 22px;"></i>
-        </div>
-    </header>
-
     <div class="card">
-        <label class="label">ဖုန်းမော်ဒယ်ရွေးပါ</label>
+        <label class="label">ဖုန်းမော်ဒယ် ရွေးချယ်ပါ</label>
         <select class="select-box" id="device-select">
-            <option value="iphone">iPhone 14 Pro</option>
-            <option value="samsung">Samsung S25 Ultra</option>
-            <option value="vivo">Vivo Y72 5G</option>
+            <option value="iphone">iPhone 15 / 16 Series</option>
+            <option value="samsung">Samsung Galaxy S Series</option>
+            <option value="android">Vivo / Oppo / Xiaomi / Realme</option>
         </select>
 
-        <label class="label">အရောင်ရွေးပါ</label>
+        <label class="label">Original အရောင်များ ရွေးချယ်ရန်</label>
         <div class="color-palette" id="color-palette"></div>
 
         <div id="capture-area">
-            <div class="phone-frame radius-iphone iphone" id="phone-ui">
+            <div class="phone-frame" id="phone-ui">
+                <div id="cam" class="camera island"></div>
                 <div class="hw-btn pwr"></div>
-                <div class="hw-btn vol-u"></div>
+                <div class="hw-btn vol-u" id="v-up"></div>
                 <div class="hw-btn vol-d" id="v-down"></div>
-                <div class="hw-btn vol-a" id="v-all" style="display:none;"></div>
-
+                <div class="hw-btn vol-all" id="v-all"></div>
                 <img id="preview-img" src="">
-                <i class="fas fa-cloud-upload-alt" id="hint"></i>
+                <i class="fas fa-plus" id="hint"></i>
             </div>
         </div>
 
         <input type="file" id="file-in" accept="image/*" style="display:none;">
-        
         <button class="btn btn-select" onclick="document.getElementById('file-in').click()">
-            <i class="fas fa-folder-open"></i> <span>Screenshot ရွေးမည်</span>
+            <i class="fas fa-image"></i> Screenshot ရွေးမည်
         </button>
-
         <button class="btn btn-download" id="save-btn" onclick="exportHighRes()">
-            <span>Get Started</span> <i class="fas fa-arrow-circle-down"></i>
+            Get Started <i class="fas fa-arrow-circle-down"></i>
         </button>
     </div>
 
     <script>
-        const deviceData = {
-            iphone: { class: "radius-iphone iphone", colors: ["#FFFFFF", "#594f63", "#222222", "#FFD700"] },
-            samsung: { class: "radius-samsung android", colors: ["#F9F9F9", "#3c3c3c", "#1a1a1a"] },
-            vivo: { class: "radius-vivo android", colors: ["#FFFFFF", "#004d40", "#212121"] }
+        const config = {
+            iphone: {
+                style: "radius-iphone side-lr", cam: "camera island", radius: "44px",
+                colors: ["#FFFFFF", "#F5F5F0", "#2D2D2E", "#4B4942", "#594F63", "#1B2431", "#E5D1D0", "#FFD700", "#C0C0C0", "#FFB6C1"]
+            },
+            samsung: {
+                style: "radius-android side-r", cam: "camera hole", radius: "28px",
+                colors: ["#F9F9F9", "#252525", "#EAD8C1", "#4A4553", "#313131", "#7B92A2", "#D4E2D4", "#E5C1CD", "#2E3B4E", "#1A1A1A"]
+            },
+            android: {
+                style: "radius-android side-r", cam: "camera hole", radius: "22px",
+                colors: ["#FFFFFF", "#000000", "#004D40", "#7C4DFF", "#FF5252", "#FFEB3B", "#2196F3", "#4CAF50", "#FF9800", "#9C27B0"]
+            }
         };
 
         const deviceSelect = document.getElementById('device-select');
         const colorPalette = document.getElementById('color-palette');
         const phoneUI = document.getElementById('phone-ui');
-        const vDown = document.getElementById('v-down');
-        const vAll = document.getElementById('v-all');
-        const volU = document.querySelector('.vol-u');
+        const cam = document.getElementById('cam');
 
-        function updateColors(device) {
+        function updateUI(id) {
+            const data = config[id];
             colorPalette.innerHTML = "";
-            deviceData[device].colors.forEach((color, index) => {
+            
+            data.colors.forEach((color, i) => {
                 const dot = document.createElement('div');
-                dot.className = `color-dot ${index === 0 ? 'active' : ''}`;
+                dot.className = `color-dot ${i === 0 ? 'active' : ''}`;
                 dot.style.backgroundColor = color;
                 dot.onclick = () => {
                     document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
@@ -133,24 +128,20 @@
                 };
                 colorPalette.appendChild(dot);
             });
-            phoneUI.style.borderColor = deviceData[device].colors[0];
-            phoneUI.className = 'phone-frame ' + deviceData[device].class;
 
-            if (device === 'iphone') {
-                vDown.style.display = "block"; volU.style.display = "block"; vAll.style.display = "none";
-            } else {
-                vDown.style.display = "none"; volU.style.display = "none"; vAll.style.display = "block";
-            }
+            phoneUI.className = 'phone-frame ' + data.style;
+            phoneUI.style.borderRadius = data.radius;
+            cam.className = data.cam;
+            phoneUI.style.borderColor = data.colors[0];
+
+            const isLR = data.style.includes('side-lr');
+            document.getElementById('v-up').style.display = isLR ? "block" : "none";
+            document.getElementById('v-down').style.display = isLR ? "block" : "none";
+            document.getElementById('v-all').style.display = isLR ? "none" : "block";
         }
 
-        deviceSelect.onchange = () => updateColors(deviceSelect.value);
-        updateColors('iphone');
-
-        document.getElementById('mode-btn').onclick = function() {
-            document.body.classList.toggle('dark-theme');
-            this.classList.toggle('fa-sun');
-            this.classList.toggle('fa-moon');
-        };
+        deviceSelect.onchange = () => updateUI(deviceSelect.value);
+        updateUI('iphone');
 
         document.getElementById('file-in').onchange = (e) => {
             const file = e.target.files[0];
@@ -166,30 +157,17 @@
         };
 
         async function exportHighRes() {
-            const preview = document.getElementById('preview-img');
-            if (!preview.src || preview.style.display === 'none') return alert("ကျေးဇူးပြု၍ ပုံအရင်ရွေးပါ");
-            
+            if (!document.getElementById('preview-img').src) return alert("ပုံအရင်ရွေးပါ");
             const btn = document.getElementById('save-btn');
-            // Icon ပြောင်းလဲခြင်း (Processing state)
-            btn.innerHTML = '<span>Processing...</span> <i class="fas fa-spinner fa-spin"></i>';
-            btn.style.opacity = "0.7";
-
-            try {
-                const canvas = await html2canvas(document.getElementById('capture-area'), {
-                    scale: 6.57, 
-                    useCORS: true, backgroundColor: null
-                });
-                const link = document.createElement('a');
-                link.download = `DMO_Mockup_${Date.now()}.png`;
-                link.href = canvas.toDataURL("image/png");
-                link.click();
-            } catch (e) {
-                alert("Error: " + e);
-            } finally {
-                // မူလ icon သို့ ပြန်ပြောင်းခြင်း
-                btn.innerHTML = '<span>Get Started</span> <i class="fas fa-arrow-circle-down"></i>';
-                btn.style.opacity = "1";
-            }
+            btn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+            const canvas = await html2canvas(document.getElementById('capture-area'), {
+                scale: 6.57, useCORS: true, backgroundColor: null
+            });
+            const link = document.createElement('a');
+            link.download = `DMO_Mockup_${Date.now()}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+            btn.innerHTML = 'Get Started <i class="fas fa-arrow-circle-down"></i>';
         }
     </script>
 </body>
