@@ -9,15 +9,16 @@
     <style>
         :root { 
             --accent: #007bff; 
-            --bg: #000; 
-            --card: rgba(255, 255, 255, 0.95); 
+            --bg: #f8f9fa; 
+            --card: white; 
             --text: #333; 
             --tab-bg: #eee; 
             --canvas-bg: #e9ecef;
         }
         
         [data-theme="dark"] {
-            --card: rgba(30, 30, 30, 0.95);
+            --bg: #121212;
+            --card: #1e1e1e;
             --text: #f1f1f1;
             --tab-bg: #333;
             --canvas-bg: #2a2a2a;
@@ -29,56 +30,63 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; transition: 0.3s; }
-        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; color: var(--text); }
+        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; color: var(--text); }
 
         .container { 
-            background: var(--card); width: 100%; max-width: 600px; 
-            border-radius: 30px; padding: 25px; box-shadow: 0 0 30px rgba(255,255,255,0.1); 
-            text-align: center; border: 4px solid transparent;
+            background: var(--card); width: 100%; max-width: 550px; border-radius: 25px; padding: 25px; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1); text-align: center; position: relative;
+            border: 4px solid transparent;
             background-image: linear-gradient(var(--card), var(--card)), 
                               linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
             background-origin: border-box; background-clip: padding-box, border-box;
             background-size: 200% auto; animation: rainbow 4s linear infinite;
         }
-
-        /* 3D Rainbow Text for Labels & Titles */
-        .brand-name h2, .label, .tab-text, .btn-text, #theme-text { 
+        
+        .brand-name h2, .label, .tab span, .btn span, #theme-text { 
             background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff);
             background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             animation: rainbow 3s linear infinite; font-weight: 900 !important;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); text-transform: uppercase;
+            text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
+        .brand-name h2 { font-size: 32px; }
 
-        /* Plain Icons */
-        i { color: var(--text) !important; -webkit-text-fill-color: initial !important; background: none !important; animation: none !important; }
+        i { color: var(--text) !important; -webkit-text-fill-color: initial !important; background: none !important; }
 
-        .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header-box { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .right-section { display: flex; align-items: center; gap: 12px; }
         .fb-logo { color: #1877F2 !important; font-size: 26px; text-decoration: none; }
         
-        .dark-mode-btn { background: var(--tab-bg); border: 1px solid rgba(150,150,150,0.2); padding: 8px 15px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .dark-mode-btn { background: var(--tab-bg); border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
 
-        .tabs { display: flex; background: var(--tab-bg); border-radius: 15px; padding: 5px; margin-bottom: 25px; }
-        .tab { flex: 1; padding: 12px; cursor: pointer; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .tabs { display: flex; background: var(--tab-bg); border-radius: 15px; padding: 5px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; cursor: pointer; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .tab.active { background: var(--card); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* Grid for Select Boxes */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; text-align: left; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; text-align: left; margin-bottom: 20px; }
         .label { font-size: 11px; margin-bottom: 8px; display: block; }
-        .select-box { width: 100%; padding: 12px; border: 1px solid #55555540; border-radius: 12px; background: var(--card); color: var(--text); outline: none; cursor: pointer; }
+        .select-box { width: 100%; padding: 12px; border: 1px solid #55555530; border-radius: 12px; background: var(--card); color: var(--text); outline: none; }
 
-        /* Preview Area */
         #capture-area { 
-            width: 100%; height: 480px; background: var(--canvas-bg); border-radius: 20px;
-            display: flex; justify-content: center; align-items: center; 
-            position: relative; overflow: hidden; cursor: pointer; border: 1px solid #55555520;
+            width: 100%; height: 480px; background: var(--canvas-bg); margin-bottom: 20px; border-radius: 20px;
+            display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: pointer;
         }
-        .phone-frame { width: 220px; height: 450px; background: #000; border: 10px solid #333; border-radius: 40px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
         
-        #preview-img, #preview-video { width: 100%; height: 100%; object-fit: cover; display: none; }
-        #plus-icon { font-size: 50px; color: #fff; opacity: 0.2; position: absolute; }
+        .phone-frame { 
+            width: 210px; height: 440px; background: #000; border: 10px solid #1c1c1c; 
+            border-radius: 40px; position: relative; display: flex; align-items: center; 
+            justify-content: center; transition: 0.3s; z-index: 5;
+            overflow: hidden; padding: 0;
+        }
+        
+        #preview-img, #preview-video { 
+            width: 100%; height: 100%; object-fit: cover; display: none; 
+            border-radius: inherit; /* ဖုန်းဘောင်ရဲ့ Radius အတိုင်း ယူမယ် */
+        }
+        
+        #plus-icon { font-size: 45px; color: #fff; opacity: 0.2; position: absolute; z-index: 1; }
 
-        .btn { width: 100%; padding: 16px; border-radius: 50px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
+        .btn-action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn { padding: 15px; border-radius: 50px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
         .btn-upload { background: transparent; border: 2px dashed var(--accent); }
         .btn-save { background: var(--accent); color: white; display: none; }
     </style>
@@ -97,38 +105,42 @@
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('image', event)"><i class="fas fa-camera"></i> <span class="tab-text">Image</span></div>
-        <div class="tab" onclick="switchTab('video', event)"><i class="fas fa-video"></i> <span class="tab-text">Video</span></div>
+        <div class="tab active" onclick="switchTab('image', event)"><i class="fas fa-camera"></i> <span>Image</span></div>
+        <div class="tab" onclick="switchTab('video', event)"><i class="fas fa-video"></i> <span>Video</span></div>
     </div>
 
     <div class="grid">
         <div>
-            <label class="label"><i class="fas fa-mobile-alt"></i> Model</label>
+            <label class="label">Model</label>
             <select class="select-box" onchange="updateModel(this.value)">
                 <option value="iphone">iPhone 14 Pro</option>
+                <option value="samsung">Samsung S23 Ultra</option>
                 <option value="vivo">vivo Y72 5G</option>
             </select>
         </div>
         
-        <div id="video-options" style="display: none;">
-            <label class="label"><i class="fas fa-expand"></i> Platform Size</label>
-            <select class="select-box" onchange="updateSize(this.value)">
-                <option value="tiktok">TikTok (9:16)</option>
-                <option value="youtube">YouTube (16:9)</option>
-                <option value="fb">Facebook (1:1)</option>
+        <div>
+            <label class="label">Frame Color</label>
+            <select class="select-box" onchange="updateColor(this.value)">
+                <option value="#1c1c1c">Black</option>
+                <option value="#e3e4e5">Silver</option>
+                <option value="#f5e3c7">Gold</option>
+                <option value="#594f63">Purple</option>
+                <option value="#a7c1d1">Blue</option>
             </select>
         </div>
 
-        <div>
-            <label class="label"><i class="fas fa-palette"></i> Color</label>
-            <select class="select-box" onchange="updateColor(this.value)">
-                <option value="#1c1c1c">Black</option>
-                <option value="#ffd700">Gold</option>
+        <div id="video-ctrl" style="display: none;">
+            <label class="label">Platform</label>
+            <select class="select-box" onchange="updateVideoSize(this.value)">
+                <option value="9/16">TikTok</option>
+                <option value="16/9">YouTube</option>
+                <option value="1/1">Facebook</option>
             </select>
         </div>
     </div>
 
-    <div id="capture-area" onclick="document.getElementById('file-in').click()">
+    <div id="capture-area" onclick="triggerFileSelect()">
         <div class="phone-frame" id="phone-ui">
             <i class="fas fa-plus-circle" id="plus-icon"></i>
             <img id="preview-img">
@@ -138,13 +150,14 @@
 
     <input type="file" id="file-in" style="display:none;">
 
-    <button class="btn btn-upload" onclick="document.getElementById('file-in').click()">
-        <i class="fas fa-images"></i> <span class="btn-text">Choose Media</span>
-    </button>
-
-    <button class="btn btn-save" id="save-btn" onclick="saveProject()">
-        <i class="fas fa-download"></i> <span class="btn-text" style="color: white;">Download Now</span>
-    </button>
+    <div class="btn-action-group">
+        <button class="btn btn-upload" onclick="triggerFileSelect()">
+            <i class="fas fa-folder-open"></i> <span>File</span>
+        </button>
+        <button class="btn btn-save" id="save-btn" onclick="saveProject()">
+            <i class="fas fa-download"></i> <span style="color:white">Save</span>
+        </button>
+    </div>
 </div>
 
 <script>
@@ -155,7 +168,7 @@
     const video = document.getElementById('preview-video');
     const fileIn = document.getElementById('file-in');
     const saveBtn = document.getElementById('save-btn');
-    const videoOpt = document.getElementById('video-options');
+    const videoCtrl = document.getElementById('video-ctrl');
 
     function toggleDarkMode() {
         const body = document.body;
@@ -172,27 +185,36 @@
         currentMode = mode;
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         event.currentTarget.classList.add('active');
-        fileIn.accept = mode === 'image' ? "image/*" : "video/*";
-        videoOpt.style.display = mode === 'video' ? 'block' : 'none';
-        
-        // Reset view when switching
-        canvas.style.aspectRatio = "unset";
-        canvas.style.height = "480px";
-        phone.style.transform = "scale(1)";
+        img.style.display = 'none';
+        video.style.display = 'none';
+        video.pause();
+        document.getElementById('plus-icon').style.display = 'block';
+        saveBtn.style.display = 'none';
+        videoCtrl.style.display = mode === 'video' ? 'block' : 'none';
+        canvas.style.aspectRatio = "unset"; canvas.style.height = "480px"; phone.style.transform = "scale(1)";
     }
 
-    function updateSize(platform) {
-        if (platform === 'tiktok') {
-            canvas.style.aspectRatio = "9/16"; phone.style.transform = "scale(1)";
-        } else if (platform === 'youtube') {
-            canvas.style.aspectRatio = "16/9"; phone.style.transform = "scale(0.6)";
-        } else if (platform === 'fb') {
-            canvas.style.aspectRatio = "1/1"; phone.style.transform = "scale(0.8)";
+    function triggerFileSelect() {
+        fileIn.accept = currentMode === 'image' ? "image/*" : "video/*";
+        fileIn.click();
+    }
+
+    function updateVideoSize(ratio) {
+        canvas.style.aspectRatio = ratio;
+        if (ratio === '16/9') { phone.style.transform = "scale(0.55)"; canvas.style.height = "300px"; } 
+        else if (ratio === '1/1') { phone.style.transform = "scale(0.75)"; canvas.style.height = "400px"; } 
+        else { phone.style.transform = "scale(1)"; canvas.style.height = "480px"; }
+    }
+
+    // Phone Model ၃ မျိုးအတွက် ဒေါင့်ချိုးများ သတ်မှတ်ခြင်း
+    function updateModel(model) { 
+        if(model === 'iphone') {
+            phone.style.borderRadius = "40px";
+        } else if(model === 'samsung') {
+            phone.style.borderRadius = "8px"; // Samsung Ultra က ဒေါင့်ချိုး သိပ်မဝိုင်းပါ
+        } else {
+            phone.style.borderRadius = "25px"; // vivo အတွက်
         }
-    }
-
-    function updateModel(model) {
-        phone.style.borderRadius = model === 'iphone' ? "45px" : "30px";
     }
 
     function updateColor(color) { phone.style.borderColor = color; }
@@ -213,7 +235,7 @@
     async function saveProject() {
         const result = await html2canvas(canvas, { scale: 3 });
         const link = document.createElement('a');
-        link.download = `KSO_${Date.now()}.png`;
+        link.download = `KSO_Export_${Date.now()}.png`;
         link.href = result.toDataURL();
         link.click();
     }
