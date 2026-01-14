@@ -37,10 +37,11 @@
             transition: 0.3s; z-index: 5;
         }
 
+        /* ကင်မရာ အရွယ်အစားကို အထူးသေးငယ်အောင် ပြင်ဆင်ခြင်း */
         .notch { position: absolute; background: #000; z-index: 10; transition: 0.3s; }
-        .dynamic-island { width: 65px; height: 22px; border-radius: 20px; top: 12px; }
-        .waterdrop { width: 28px; height: 18px; border-bottom-left-radius: 14px; border-bottom-right-radius: 14px; top: 0; }
-        .punch-hole { width: 10px; height: 10px; border-radius: 50%; top: 16px; }
+        .dynamic-island { width: 40px; height: 12px; border-radius: 20px; top: 10px; } /* 65x22 မှ 40x12 သို့ */
+        .waterdrop { width: 18px; height: 12px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; top: 0; } /* 28x18 မှ 18x12 သို့ */
+        .punch-hole { width: 6px; height: 6px; border-radius: 50%; top: 14px; } /* 10x10 မှ 6x6 သို့ */
 
         #preview-img, #preview-video { width: 100%; height: 100%; object-fit: cover; display: none; }
         #plus-icon { font-size: 50px; color: #333; position: absolute; z-index: 1; opacity: 0.15; }
@@ -160,22 +161,21 @@
 
     function updateVideoSize(ratio) {
         canvas.style.aspectRatio = ratio;
-        // Background Color change based on platform for visual feedback
         if (ratio === '16/9') {
             phone.style.transform = "scale(0.55)"; 
             canvas.style.width = "100%";
             canvas.style.height = "320px";
-            canvas.style.backgroundColor = "#ff000010"; // Light YouTube Red
+            canvas.style.backgroundColor = "#ff000010"; 
         } else if (ratio === '1/1') {
             phone.style.transform = "scale(0.75)"; 
             canvas.style.width = "400px";
             canvas.style.height = "400px";
-            canvas.style.backgroundColor = "#1877f210"; // Light FB Blue
+            canvas.style.backgroundColor = "#1877f210"; 
         } else {
             phone.style.transform = "scale(1)"; 
             canvas.style.width = "300px";
             canvas.style.height = "500px";
-            canvas.style.backgroundColor = "#00000010"; // Light TikTok Black
+            canvas.style.backgroundColor = "#00000010"; 
         }
     }
 
