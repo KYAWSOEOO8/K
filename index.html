@@ -13,7 +13,7 @@
             --card: white; 
             --text: #333; 
             --tab-bg: #eee; 
-            --canvas-bg: #e9ecef;
+            --canvas-bg: transparent; 
         }
         
         [data-theme="dark"] {
@@ -21,7 +21,6 @@
             --card: #1e1e1e;
             --text: #f1f1f1;
             --tab-bg: #333;
-            --canvas-bg: #2a2a2a;
         }
 
         @keyframes rainbow {
@@ -66,8 +65,9 @@
         .label { font-size: 11px; margin-bottom: 8px; display: block; }
         .select-box { width: 100%; padding: 12px; border: 1px solid #55555530; border-radius: 12px; background: var(--card); color: var(--text); outline: none; }
 
+        /* ဘေးက အကွက်တွေ လုံးဝမပါစေရန် ပြင်ဆင်ထားသည် */
         #capture-area { 
-            width: 100%; height: 480px; background: var(--canvas-bg); margin-bottom: 20px; border-radius: 20px;
+            width: 100%; height: 480px; background: transparent; margin-bottom: 20px; border-radius: 20px;
             display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; cursor: pointer;
         }
         
@@ -80,10 +80,10 @@
         
         #preview-img, #preview-video { 
             width: 100%; height: 100%; object-fit: cover; display: none; 
-            border-radius: inherit; /* ဖုန်းဘောင်ရဲ့ Radius အတိုင်း ယူမယ် */
+            border-radius: inherit;
         }
         
-        #plus-icon { font-size: 45px; color: #fff; opacity: 0.2; position: absolute; z-index: 1; }
+        #plus-icon { font-size: 45px; color: #ccc; opacity: 0.5; position: absolute; z-index: 1; }
 
         .btn-action-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .btn { padding: 15px; border-radius: 50px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; }
@@ -206,15 +206,10 @@
         else { phone.style.transform = "scale(1)"; canvas.style.height = "480px"; }
     }
 
-    // Phone Model ၃ မျိုးအတွက် ဒေါင့်ချိုးများ သတ်မှတ်ခြင်း
     function updateModel(model) { 
-        if(model === 'iphone') {
-            phone.style.borderRadius = "40px";
-        } else if(model === 'samsung') {
-            phone.style.borderRadius = "8px"; // Samsung Ultra က ဒေါင့်ချိုး သိပ်မဝိုင်းပါ
-        } else {
-            phone.style.borderRadius = "25px"; // vivo အတွက်
-        }
+        if(model === 'iphone') phone.style.borderRadius = "40px";
+        else if(model === 'samsung') phone.style.borderRadius = "8px";
+        else phone.style.borderRadius = "25px";
     }
 
     function updateColor(color) { phone.style.borderColor = color; }
@@ -233,10 +228,16 @@
     };
 
     async function saveProject() {
-        const result = await html2canvas(canvas, { scale: 3 });
+        // သိမ်းလိုက်တဲ့အခါ ဘေးက ဘောင်တွေ၊ အရောင်တွေ လုံးဝမပါစေရန် backgroundColor: null ထားခြင်းဖြစ်သည်
+        const result = await html2canvas(canvas, { 
+            scale: 3, 
+            backgroundColor: null,
+            logging: false,
+            useCORS: true 
+        });
         const link = document.createElement('a');
         link.download = `KSO_Export_${Date.now()}.png`;
-        link.href = result.toDataURL();
+        link.href = result.toDataURL("image/png");
         link.click();
     }
 </script>
